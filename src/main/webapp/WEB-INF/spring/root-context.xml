@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 3/18 내용 복붙 -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig"> 
+		<property name="driverClassName"
+				value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="jdbcUrl"
+				value="jdbc:log4jdbc:oracle:thin:@localhost:1521:fintech"></property>		
+		<property name="username" value="test"></property>
+		<property name="password" value="test1234"></property>
+	</bean>
+	
+	<!-- HikariCP configuration : 데이터베이스 연결 설정
+		 destroy-method="close" : 데이터베이스 사용 후 자동으로 닫는다.
+		 constructor-arg	 	: 생성자 생성 시 id="" 설정 정보를 참고해 데이터베이스 연결 시도. -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	
+	<!-- p91 mybatis 관련 설정 추가 	3/14 
+		 데이터베이스와 연결해서 SQL 명령문을 실행시켜주는 객체 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- p95 mybatis 관련 설정 추가 	3/14 -->
+	<mybatis-spring:scan base-package="org.fintech.mapper"></mybatis-spring:scan>
+	
+	<!-- p202 @Service, @Controller, @RestController 등의 어노테이션이 설정된 
+		클래스를 빈 등록하기 위해 스캔 	3/18 -->	 
+	<context:component-scan base-package="org.fintech.service"></context:component-scan>	 
+	
+	
+	
+</beans>

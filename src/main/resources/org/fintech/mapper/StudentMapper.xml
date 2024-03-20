@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.fintech.mapper.StudentMapper">
+
+<select id="studentList" resultType="org.fintech.domain.StudentVO"> 
+select * from student order by sno
+</select>
+
+<insert id="studentInsert">
+	insert into student (sno, name, phone, regdate, updatedate)
+	values 		(#{sno}, #{name}, #{phone}, sysdate, null)
+</insert><!-- seq_board.nextval -->
+
+<select id="studentDetail" resultType="org.fintech.domain.StudentVO">
+	select 	* 
+	from 	student 
+	where 	sno = #{sno}
+</select>
+
+<delete id="studentDelete">
+delete from student where sno = #{sno}
+</delete>
+
+<update id="studentUpdate">
+	update 	student
+	set		name = #{name},
+			phone = #{phone},
+			updatedate = sysdate
+	where	sno = #{sno}
+</update>
+
+
+
+</mapper>

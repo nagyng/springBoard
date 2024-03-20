@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!-- p188 	3/18 -->
+<!-- MyBatis를 사용한다는 선언 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- BoardMapper.java 인터페이스의 위치 선언 -->
+<mapper namespace="org.fintech.mapper.BoardMapper">
+
+<!-- id = BoardMapper 의 추상메서드 이름 선언 -->
+					<!-- resultType = select 문을 실행 후 리턴되는 자료형을 선언 -->
+<select id="getList" resultType="org.fintech.domain.BoardVO">
+<!-- <,> 비교연산자를 태그로 인식하므로 반드시 선언 -->
+<![CDATA[
+select * from tbl_board where bno > 0
+]]>
+</select>
+
+<!-- p190	3/18 -->
+<!-- #{자바의 필드명} 선언하면 내부적으로 PreparedStatement 가 동작되어 값을 대입 -->
+<insert id="insert">
+	insert into tbl_board (bno, title, content, writer, regdate)
+	values 		(seq_board.nextval, #{title}, #{content}, #{writer}, sysdate)
+</insert>
+
+<insert id="insertSelectKey">
+	<!-- insert 문이 실행되기 전 지금 등록되는 게시물번호를 검색 -->
+	<selectKey keyProperty="bno" order="BEFORE"
+				resultType="long">
+	select 	seq_board.nextval 
+	from 	dual
+	</selectKey>
+	
+	insert into tbl_board (bno,title,content,writer, regdate)
+	values 		(#{bno}, #{title}, #{content}, #{writer}, sysdate)
+</insert>
+
+<!-- p193 -->
+<!-- 특정 게시물 번호에 대한 상세내역 처리 -->
+<select id="read" resultType="org.fintech.domain.BoardVO">
+	select 	* 
+	from 	tbl_board 
+	where 	bno = #{bno}
+</select>
+
+<!-- p195 -->
+<!-- 특정 게시물 내역 삭제 처리 -->
+<delete id="delete">
+	delete 	
+	from 	tbl_board 
+	where 	bno = #{bno}
+</delete>
+
+<!-- p196 -->
+<!-- 특정 게시물 내역 수정 처리 -->
+<update id="update">
+	update 	tbl_board
+	set 	title = #{title},
+			content = #{content},
+			writer = #{writer},
+			updateDate = sysdate
+	where 	bno = #{bno}
+</update>
+
+
+
+
+</mapper>  
