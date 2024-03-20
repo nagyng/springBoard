@@ -1,6 +1,8 @@
 package org.fintech.controller;
 
 import org.fintech.domain.BoardVO;
+import org.fintech.domain.Criteria;
+import org.fintech.domain.PageDTO;
 import org.fintech.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +24,27 @@ public class BoardController {
 	private BoardService service;
 	
 	//겟 방식
-	@GetMapping("/list")		// http://localhost:8080/board/list 게시물 목록 처리
-	public void list(Model model) {		//model : 데이터값 jsp에전송
+	//@GetMapping("/list")		// http://localhost:8080/board/list 게시물 목록 처리
+	//public void list(Model model) {		//model : 데이터값 jsp에전송
 		
-		log.info("list");
+	//	log.info("list");
 		
 		// model.addAttribute == request.setAttribute
-		model.addAttribute("list", service.getList());
+	//	model.addAttribute("list", service.getList());
+	//}
+	
+	//p300  	3/20
+	//페이징 처리
+	@GetMapping("/list") 
+	public void list(Criteria cri, Model model) { 
+		
+		log.info("list : " + cri); 
+		model.addAttribute("list", service.getList(cri)); 
+	//p307  	3/20  
+		model.addAttribute("pageMaker", new PageDTO(cri, 123)); 
+		
 	}
+	
 	
 	//p216 
 	//포스트 방식
@@ -47,15 +62,23 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	//p218 	3/19
-	@GetMapping("/get")			// http://localhost:8080/board/get?bno=00
-	public void get(@RequestParam("bno") Long bno, Model model) {		//@RequestParam : url 의 매개변수값을 가져오는 어노테이션 
+	//p218  	3/19
+	//@GetMapping("/get")			// http://localhost:8080/board/get?bno=00
+	//public void get(@RequestParam("bno") Long bno, Model model) {		//@RequestParam : url 의 매개변수값을 가져오는 어노테이션 
 		
-		log.info("/get");			//service.get(bno) : 특정 게시물번호에 대해 상세보기 실행해 결과값을 board 라는 속성에 대입 
+	//	log.info("/get");			//service.get(bno) : 특정 게시물번호에 대해 상세보기 실행해 결과값을 board 라는 속성에 대입 
+	//	model.addAttribute("board", service.get(bno));
+	//}
+	
+	//p259  	3/20
+	@GetMapping({"/get","/modify"})
+	public void get(@RequestParam("bno") Long bno, Model model) {	 
+		
+		log.info("/get");		 
 		model.addAttribute("board", service.get(bno));
 	}
 	
-	//p219 	3/19 
+	//p219  	3/19 
 	@PostMapping("/modify")		//수정 	http://localhost:8080/board/modify
 	public String modify(BoardVO board, RedirectAttributes rttr) {
 		log.info("modify: " + board);
@@ -78,6 +101,14 @@ public class BoardController {
 			rttr.addFlashAttribute("result","success");
 		}
 		return "redirect:/board/list";
+	}
+	
+	//p239  	3/20
+	//신규 게시물 등록 화면 처리
+	// views -> board -> register.jsp 생성 
+	@GetMapping("/register") 
+	public void register() {
+		
 	}
 	
 	

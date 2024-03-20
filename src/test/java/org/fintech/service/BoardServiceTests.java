@@ -1,8 +1,10 @@
 package org.fintech.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
 import org.fintech.domain.BoardVO;
+import org.fintech.domain.Criteria;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +47,16 @@ public class BoardServiceTests {
 	}
 	
 	//206	
-	@Ignore
+	@Test
 	public void testGetList() {
 		
 		//게시물 목록을 리턴받아 반복문을 사용해 콘솔창에 출력.
-		service.getList().forEach(board -> log.info(board));
+		//service.getList().forEach(board -> log.info(board));
+		
+	//p300  	3/20
+		//페이징 처리
+		service.getList(new Criteria(2,10))
+							.forEach(board -> log.info(board));
 	}
 	
 	//207
@@ -68,7 +75,7 @@ public class BoardServiceTests {
 		log.info("삭제 결과: " + service.remove(2L));
 	}
 	//209
-	@Test 
+	@Ignore 
 	public void testUpdate() {
 
 		//게시물 번호의 존재여부를 확인

@@ -1,6 +1,9 @@
 package org.fintech.mapper;
 
+import java.util.List;
+
 import org.fintech.domain.BoardVO;
+import org.fintech.domain.Criteria;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +28,7 @@ public class BoardMapperTests {
 		mapper.getList().forEach(board -> log.info(board));
 	}
 	
-	//p191 Insert
+	//p191  Insert
 	@Ignore
 	public void testInsert() {
 		BoardVO board = new BoardVO();
@@ -39,7 +42,7 @@ public class BoardMapperTests {
 		log.info(board);
 	}
 	
-	//p192 InsertSelectKey
+	//p192  InsertSelectKey
 	@Ignore
 	public void testInsertSelectKey() {
 		BoardVO board = new BoardVO();
@@ -53,7 +56,7 @@ public class BoardMapperTests {
 		log.info("현재 등록한 게시물번호: " + board.getBno());
 	}
 	
-	//p194 Read
+	//p194  Read
 	@Ignore
 	public void testRead() {
 		
@@ -63,15 +66,15 @@ public class BoardMapperTests {
 		log.info(board);
 	}
 	
-	//p195 Delete 
+	//p195  Delete 
 	@Ignore
 	public void testDelete() {
 		
 		log.info("삭제건수: " + mapper.delete(2L));
 	}
 
-	//p197 Update 
-	@Test
+	//p197  Update 
+	@Ignore
 	public void testUpdate() {
 		
 		BoardVO board = new BoardVO();
@@ -84,6 +87,35 @@ public class BoardMapperTests {
 		int count = mapper.update(board);
 		log.info("수정건수: " + count);
 	}
+	
+	//p295  	3/20
+	//페이징 처리
+	@Ignore
+	public void testPaging() {
+		
+		// 1페이지 10개씩 보여주는 Criteria 인스턴스 생성
+		Criteria cri = new Criteria();
+		//list 변수에 1페이지 게시물 내역이 대입
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		//반복문으로 콘솔창에 출력
+		list.forEach(board -> log.info(board)); 
+	}
+	
+	//p297  	3/20
+	//페이징 처리 - 수정 
+	@Test
+	public void testPaging2() {
+		 
+		Criteria cri = new Criteria();
+		//글 10개씩 2페이지
+		cri.setPageNum(2);
+		cri.setAmount(10);
+		 
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		 
+		list.forEach(board -> log.info(board.getBno())); 
+	}
+	
 	
 	
 	

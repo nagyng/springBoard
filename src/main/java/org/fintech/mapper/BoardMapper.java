@@ -3,6 +3,7 @@ package org.fintech.mapper;
 import java.util.List;
 
 import org.fintech.domain.BoardVO;
+import org.fintech.domain.Criteria;
 
 public interface BoardMapper {
 
@@ -29,6 +30,12 @@ public interface BoardMapper {
 	//p196 
 	//특정 게시물 내역 수정 처리
 	public int update(BoardVO board);
+	
+	//p294  	3/20
+	//페이징 처이
+	public List<BoardVO> getListWithPaging(Criteria cri);
+	
+	
 	
 	
 	

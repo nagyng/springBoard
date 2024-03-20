@@ -12,7 +12,10 @@
 <select id="getList" resultType="org.fintech.domain.BoardVO">
 <!-- <,> 비교연산자를 태그로 인식하므로 반드시 선언 -->
 <![CDATA[
-select * from tbl_board where bno > 0
+	select 		* 
+	from 		tbl_board 
+	where 		bno > 0 
+	order by 	bno desc
 ]]>
 </select>
 
@@ -62,6 +65,21 @@ select * from tbl_board where bno > 0
 	where 	bno = #{bno}
 </update>
 
+<!-- p294, p297 	3/20 -->
+<!-- 페이징 처리 -->
+<select id="getListWithPaging" resultType="org.fintech.domain.BoardVO">
+<![CDATA[
+	select 	bno, title, content, writer
+	from	(
+				select 	/*+INDEX_DESC(tbl_board pk_board) */
+						rownum rn, bno, title, content, writer
+				from	tbl_board
+				where	rownum <= #{pageNum} * #{amount}
+			)
+	where	rn > (#{pageNum} -1) * #{amount}
+	
+]]>
+</select>
 
 
 

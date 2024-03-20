@@ -73,7 +73,7 @@ public class BoardControllerTests {
 		log.info(resultPage);
 	}
 	
-	//p218 	3/19
+	//p218  	3/19
 	@Ignore
 	public void testGet() throws Exception {
 		
@@ -86,7 +86,7 @@ public class BoardControllerTests {
 				);
 	}
 	
-	//p220 	3/19
+	//p220  	3/19
 	@Ignore
 	public void testModify() throws Exception {
 		
@@ -102,15 +102,33 @@ public class BoardControllerTests {
 		log.info(resultPage);
 	}
 	
-	//p221 	3/19
-	@Test
+	//p221  	3/19
+	@Ignore
 	public void testRemove() throws Exception {
 		//삭제전 데이터베이스에 게시물 번호 확인할 것
 		String resultPage = mockMvc.perform(MockMvcRequestBuilders.post("/board/remove")
-					.param("bno", "12")
+					.param("bno", "31")
 					).andReturn().getModelAndView().getViewName();
 		log.info(resultPage);
 	}
+	 
+	//p301  	3/20
+	//페이징 처리
+	@Test
+	public void testListPaging() throws Exception {
+		
+		log.info(mockMvc.perform(
+				MockMvcRequestBuilders
+				.get("/board/list")
+				.param("pageNum", "2")
+				.param("amount", "10")
+				)
+				.andReturn()
+				.getModelAndView()
+				.getModelMap());
+	} 
+	
+	
 	
 	
 }

@@ -3,6 +3,7 @@ package org.fintech.service;
 import java.util.List;
 
 import org.fintech.domain.BoardVO;
+import org.fintech.domain.Criteria;
 import org.fintech.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardVO get(Long bno) {
-		//207
+		//p207
 		log.info("get.............." + bno);
 		
 		return mapper.read(bno);
@@ -44,7 +45,7 @@ public class BoardServiceImpl implements BoardService {
 	//특정 게시물 수정 처리
 	@Override
 	public boolean modify(BoardVO board) { 
-		//208 
+		//p208 
 		log.info("modify..............." + board);
 		
 		return mapper.update(board) == 1;
@@ -52,22 +53,32 @@ public class BoardServiceImpl implements BoardService {
 	//특정 게시물 삭제 처리 
 	@Override
 	public boolean remove(Long bno) {
-		//208 
+		//p208 
 		log.info("remove..............." + bno);
 		
 		return mapper.delete(bno) == 1;
 	}
 
 	
-	@Override
-	public List<BoardVO> getList() {
+	//@Override
+	//public List<BoardVO> getList() {
 		//p206
-		log.info("get List......................");
+	//	log.info("get List......................");
 	
-		return mapper.getList();
+	//	return mapper.getList();
+	//}
+	
+	
+	//p299  	3/20
+	@Override
+	public List<BoardVO> getList(Criteria cri) {
+		
+		log.info("게시물 페이징 처리 with criteria: " + cri);
+		
+		return mapper.getListWithPaging(cri);
 	}
 
 	
 }
 
-//p200	3/18
+//p200  	3/18
