@@ -40,7 +40,7 @@
 					
 					<div class="form-group">
 						<label for="content">Text area</label>
-						<textarea class="form-control" rows="3" name="content" id="content" readonly><c:out value="${board.content }" /></textarea>
+						<textarea class="form-control" rows="20" name="content" id="content" readonly><c:out value="${board.content }" /></textarea>
 					</div>
 					 
 					<div class="form-group">
@@ -49,13 +49,15 @@
 					</div>
 					
 					<!-- p254	3/20 -->
-					<button data-oper='modify' class="btn btn-primary">수정</button>
-							<%-- onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'"  --%>
-					<button data-oper='list' class="btn btn-warning">목록</button><!--  onclick="location.href='/board/list'" -->
+					<button data-oper='modify' class="btn btn-primary">수정</button> 
+					<button data-oper='list' class="btn btn-warning">목록</button> 
 
 					<!-- p264 	3/20 -->
 					<form id="operForm" action="/board/modify" method="get">
-						<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno }"/>'>
+						<input type="hidden" id="bno" name="bno" 		 value='<c:out value="${board.bno }"/>'>
+					<!-- p317 	3/21 (페이지번호와 한페이지당 게시물수 추가 --> 
+						<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
+						<input type="hidden" id="amount" name="amount"	 value='<c:out value="${cri.amount }"/>'>
 					</form>
 			</div>
 			<!-- end panel-body -->

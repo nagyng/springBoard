@@ -7,6 +7,7 @@ import org.fintech.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class BoardController {
 		
 	//	log.info("list");
 		
-		// model.addAttribute == request.setAttribute
+	//  model.addAttribute == request.setAttribute
 	//	model.addAttribute("list", service.getList());
 	//}
 	
@@ -40,8 +41,17 @@ public class BoardController {
 		
 		log.info("list : " + cri); 
 		model.addAttribute("list", service.getList(cri)); 
-	//p307  	3/20  
-		model.addAttribute("pageMaker", new PageDTO(cri, 123)); 
+		//p307  	3/20  
+		//model.addAttribute("pageMaker", new PageDTO(cri, 123)); 
+		
+		//p324  	3/21
+		//전체 행 수 구하기
+		int total = service.getTotal(cri);
+		
+		log.info("total: " + total);
+
+		model.addAttribute("pageMaker", new PageDTO(cri, total)); 
+		
 		
 	}
 	
@@ -70,36 +80,49 @@ public class BoardController {
 	//	model.addAttribute("board", service.get(bno));
 	//}
 	
-	//p259  	3/20
-	@GetMapping({"/get","/modify"})
-	public void get(@RequestParam("bno") Long bno, Model model) {	 
+	 
+	//p259 3/20 					
+	@GetMapping({"/get","/modify"})					//p316 		3/21  수정 
+	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {	 
 		
 		log.info("/get");		 
 		model.addAttribute("board", service.get(bno));
 	}
 	
+	
 	//p219  	3/19 
 	@PostMapping("/modify")		//수정 	http://localhost:8080/board/modify
-	public String modify(BoardVO board, RedirectAttributes rttr) {
+										//p316 		3/21  수정 
+	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify: " + board);
 		
 		if(service.modify(board)) {
 			//게시물 수정 후 일회성 속성을 지정.
 			rttr.addFlashAttribute("result","success");
 		}
+		
+		//p316 		3/21
+		//일회성 속성 선언 (현재 페이지 번호, 행 수)
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
 		//게시물 목록으로 이동 
 		return "redirect:/board/list";
 	}
 	
 	//p220	
-	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr){
+	@PostMapping("/remove")								//p316 		3/21  수정 
+	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
 		
 		log.info("remove.........." + bno);
 		//특정 게시물 삭제 처리
 		if(service.remove(bno)) {
-			rttr.addFlashAttribute("result","success");
+			rttr.addFlashAttribute("result","success");		//addFlashAttribute : 삭제
 		}
+		//p316 		3/21
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
 		return "redirect:/board/list";
 	}
 	

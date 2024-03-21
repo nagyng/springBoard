@@ -35,7 +35,9 @@ public interface BoardMapper {
 	//페이징 처이
 	public List<BoardVO> getListWithPaging(Criteria cri);
 	
-	
+	//p322  	3/21
+	//전체 행수 구하기
+	public int getTotalCount(Criteria cri);
 	
 	
 	

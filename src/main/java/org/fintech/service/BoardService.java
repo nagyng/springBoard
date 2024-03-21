@@ -26,5 +26,10 @@ public interface BoardService {
 	//p299  	3/20
 	public List<BoardVO> getList(Criteria cri);
 	
+	//p323  	3/21
+	//전체 행 수 구하기
+	public int getTotal(Criteria cri);
+	
+	
 }
 //p199  	3/18

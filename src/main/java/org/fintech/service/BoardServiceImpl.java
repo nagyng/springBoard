@@ -78,6 +78,15 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.getListWithPaging(cri);
 	}
 
+	//p323  	3/21
+	//전체 행 수 구하기
+	@Override
+	public int getTotal(Criteria cri) {
+		
+		log.info("get total count");
+		return mapper.getTotalCount(cri);
+	}
+	
 	
 }
 

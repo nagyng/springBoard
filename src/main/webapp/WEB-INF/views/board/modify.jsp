@@ -10,8 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<!-- p260 	3/20 -->
-
+<!-- p260 	3/20 --> 
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">게시물 수정</h1>
@@ -42,7 +41,7 @@
 					
 					<div class="form-group">
 						<label for="content">Text area</label>
-						<textarea class="form-control" rows="3" name="content" id="content" ><c:out value="${board.content }" /></textarea>
+						<textarea class="form-control" rows="20" name="content" id="content" ><c:out value="${board.content }" /></textarea>
 					</div>
 					 
 					<div class="form-group">
@@ -54,7 +53,10 @@
 					<button data-oper='modify' type="submit" class="btn btn-primary">수정</button>
 					<button data-oper='remove' type="submit" class="btn btn-danger">삭제</button>
 					<button data-oper='list' type="submit" class="btn btn-warning">목록</button>
-
+					
+					<!-- p319 	3/21 -->
+					<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
+					<input type="hidden" id="amount" name="amount"	 value='<c:out value="${cri.amount }"/>'>
  
 				</form>
 
@@ -65,10 +67,11 @@
 	</div>
 	<!-- end panel -->
 </div>
-<!-- /.row -->
+<!-- /.row --> 
+<%@ include file="../includes/footer.jsp" %>   
+</body>
 
 
-<%@ include file="../includes/footer.jsp" %>  
 
 <!-- p262 	3/20 -->
 <script type="text/javascript">
@@ -91,11 +94,18 @@ $(document).ready(function() {
 		} else if (operation === 'list'){	//목록 버튼 클릭 처리 
 			//move to list
 			//self.location = "/board/list";
-			//return;
+			//return; 
+			
+			formObj.attr("action", "/board/list").attr("method","get"); 
+			//p321 	3/21
+			var pageNumTag = $("input[name='pageNum']").clone();
+			var amountTag = $("input[name='amount']").clone();
 			
 			//p266 	3/20
-			formObj.attr("action", "/board/list").attr("method","get");
 			formObj.empty();		//empty() : 태그는 그대로 두고 값만 삭제. & remove() : 모두 삭제
+			//p321 	3/21
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 		}
 		
 		formObj.submit();	//수정 버튼 클릭 처리 
@@ -103,6 +113,4 @@ $(document).ready(function() {
 	});
 });
 </script>
-
-</body>
 </html>

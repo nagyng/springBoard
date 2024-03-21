@@ -55,7 +55,11 @@
                                 	<td>
                                 		<!-- p254	3/20 
                                 			제목 클릭 시 상세보기 화면이 열린다.  target="_blank" -->
-                                		<a href='/board/get?bno=<c:out value="${board.bno }"/>'><c:out value="${board.title }"/></a>
+                                			<%-- <a class="move" href='/board/get?bno=<c:out value="${board.bno }"/>'>
+                                			<c:out value="${board.title }"/></a> --%>
+                                		<!-- p314	 3/21 수정 -->
+                                		<a class="move" href='<c:out value="${board.bno }"/>'>
+                                			<c:out value="${board.title }"/></a>
                                 	</td>
                                 	<td><c:out value="${board.writer }"/></td>
                                 	<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate }"/></td>
@@ -69,20 +73,28 @@
                             <!-- pull-right : 화면 오른쪽에 표시 처리 -->
                             <div class="pull-right">
                             	<ul class="pagination"> 
+                            		<!-- p310 	3/21 페이지 액티브 수정 -->
                             		<c:if test="${pageMaker.prev }">
-                            			<li class="paginate_button previous"><a href="#">Previous</a></li>
+                            			<li class="paginate_button previous"><a href="${pageMaker.startPage -1 }">Previous</a></li>
                             		</c:if>
                             		
                             		<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
-                            			<li class="paginate_button"><a href="#">${num }</a></li>
+                            			<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active':'' }" ><a href="${num }">${num }</a></li>
                             		</c:forEach>
                             		
                             		<c:if test="${pageMaker.next }">
-                            			<li class="paginate_button next"><a href="#">Next</a></li>
+                            			<li class="paginate_button next"><a href="${pageMaker.endPage +1 }">Next</a></li>
                             		</c:if>
                             	</ul> 
                             </div>
                             <!-- 화면 하단에 페이징 처리 종료 --> 
+                            
+                            <!-- p311 	 3/21 
+                            	 페이징 화면 처리 - 별도의 a 태그 동작 -->
+                            <form action="/board/list" method="get" id="actionForm">
+                            	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
+                            	<input type="hidden" name="amount" value="${pageMaker.cri.amount }">  
+                            </form>
                             
                              
                             <!-- Modal 창 시작 -->
@@ -109,32 +121,6 @@
                             </div>
                             <!-- Modal 창 종료 -->
                             
-                            
-                            <!-- p246	3/20 -->
-                            <!-- Modal 창 시작 -->
-                            <!-- aria-hidden="true" : 모달창 초기값은 hidden -->  <!-- 
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            	<div class="model-dialog">
-                            		<div class="model-content">
-                            			<div class="model-header"> -->	
-                            				<!-- data-dismiss="modal" : 모든 창 닫기 --> <!-- 
-                            				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            				<h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            			</div>
-                            			<div class="modal-body">처리가 완료되었습니다.</div>
-                            			<div class="modal-footer">
-                            				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            				<button type="button" class="btn btn-primary">Save Changes</button>
-                            			</div>
-                            		</div> -->
-                            		<!-- /.modal-content -->
-                            	</div>
-                            	<!-- /.modal-dialog -->
-                            </div> 
-                            <!-- /.modal Modal 창 종료 -->
-                            
-                            
-                            	 
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -165,13 +151,13 @@ $(document).ready(function() {
 						첫번째 : 전달되는 값
 						두번째 : 제목 
 						세번째 : 실행되는 url */
-	history.replaceState({},null,null);
+	/* history.replaceState({},null,null); */
 	
 	function checkModal(result) {
 		
 		/* === : 값, 자료형이 모두 같다 */
 							/* (+) 뒤로가기 중복등록 수정 */
-		if(result === '' || history.state ) {
+		if(result === '' /* || history.state */ ) {
 			return;
 		}
 		/* 리턴된 게시물 번호를 숫자로 변환 */
@@ -189,6 +175,37 @@ $(document).ready(function() {
 		self.location = "/board/register";
 	});
 	
+	/* p312 	3/21  
+		하단 페이지 번호를 클릭 시 처리 */
+	var actionForm = $("#actionForm");
+	
+	$(".paginate_button a").on("click", function(e) {
+		
+		//태그의 원래 기능을 막는다 
+		e.preventDefault();
+		
+		console.log('click');
+		
+		//클릭한 페이지 번호를 pageNum input 태그에 값을 대입한 후 submit 을 하면 해당 페이지로 이동 
+		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+		
+		actionForm.submit();
+		 
+	});
+	 
+	//p315 	3/21 
+	//p315 제목을 클릭한 경우 게시물 상세보기 화면으로 이동
+	$(".move").on("click",function(e){
+		
+		e.preventDefault();
+		
+		actionForm.append("<input type='hidden' name='bno' value='"+ $(this).attr("href") + "'>");
+		actionForm.attr("action","/board/get");
+		actionForm.submit();
+	});
+	
 });
+
+
 </script>
 
