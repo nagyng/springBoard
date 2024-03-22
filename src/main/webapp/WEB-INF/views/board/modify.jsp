@@ -57,6 +57,9 @@
 					<!-- p319 	3/21 -->
 					<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
 					<input type="hidden" id="amount" name="amount"	 value='<c:out value="${cri.amount }"/>'>
+					<!-- p345 	3/22 -->
+					<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
+					<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>
  
 				</form>
 
@@ -90,22 +93,29 @@ $(document).ready(function() {
 		console.log(operation);
 		
 		if(operation === 'remove'){		//삭제 버튼 클릭 처리 
-			formObj.attr("action", "/board/remove");				// '/' 랑 ',' 빼먹음 주의....
+			formObj.attr("action", "/board/remove");
+			
 		} else if (operation === 'list'){	//목록 버튼 클릭 처리 
 			//move to list
 			//self.location = "/board/list";
-			//return; 
-			
+			//return;  
 			formObj.attr("action", "/board/list").attr("method","get"); 
 			//p321 	3/21
 			var pageNumTag = $("input[name='pageNum']").clone();
 			var amountTag = $("input[name='amount']").clone();
+			//p347 	3/22
+			var keywordTag = $("input[name='keyword']").clone();
+			var typeTag = $("input[name='type']").clone();
+			
 			
 			//p266 	3/20
 			formObj.empty();		//empty() : 태그는 그대로 두고 값만 삭제. & remove() : 모두 삭제
 			//p321 	3/21
 			formObj.append(pageNumTag);
 			formObj.append(amountTag);
+			//p347 	3/22
+			formObj.append(keywordTag);
+			formObj.append(typeTag);
 		}
 		
 		formObj.submit();	//수정 버튼 클릭 처리 

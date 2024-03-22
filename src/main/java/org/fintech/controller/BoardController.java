@@ -91,7 +91,7 @@ public class BoardController {
 	
 	
 	//p219  	3/19 
-	@PostMapping("/modify")		//수정 	http://localhost:8080/board/modify
+	@PostMapping("/modify")			// 	http://localhost:8080/board/modify
 										//p316 		3/21  수정 
 	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify: " + board);
@@ -103,11 +103,17 @@ public class BoardController {
 		
 		//p316 		3/21
 		//일회성 속성 선언 (현재 페이지 번호, 행 수)
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
+		//rttr.addAttribute("pageNum", cri.getPageNum());
+		//rttr.addAttribute("amount", cri.getAmount());
+		//p346  	3/22 	
+		//검색 조건, 검색 문자열
+		//rttr.addAttribute("type", cri.getType());
+		//rttr.addAttribute("keyword", cri.getKeyword());
 		
 		//게시물 목록으로 이동 
-		return "redirect:/board/list";
+		//return "redirect:/board/list";
+		//p350 	3/22 
+		return "redirect:/board/list" + cri.getListLink();
 	}
 	
 	//p220	
@@ -118,12 +124,9 @@ public class BoardController {
 		//특정 게시물 삭제 처리
 		if(service.remove(bno)) {
 			rttr.addFlashAttribute("result","success");		//addFlashAttribute : 삭제
-		}
-		//p316 		3/21
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
-		
-		return "redirect:/board/list";
+		} 
+		//p350 	3/22 
+		return "redirect:/board/list" + cri.getListLink();
 	}
 	
 	//p239  	3/20

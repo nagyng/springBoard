@@ -65,6 +65,32 @@
 	where 	bno = #{bno}
 </update>
 
+
+<!-- p338 	3/22 -->
+<!-- 목록과 데이터 개수 처리 (sql 문에 이름붙여서 부르기) -->
+<sql id="criteria">
+	<!-- p335 	3/22 검색 및 페이징 처리 -->
+	<!-- prefixOverrides="OR" : 맨앞에 OR로 시작하면 삭제 --> 
+	<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+		<foreach item='type' collection="typeArr">
+			<trim prefix="OR">
+				<!-- 검색조건에서 선택을 제목: T, 내용: C, 작성자: W, 제목+내용: TC, ... -->
+				<choose>
+					<when test="type == 'T'.toString()">
+						title like '%'||#{keyword}||'%'
+					</when>
+					<when test="type == 'C'.toString()">
+						content like '%'||#{keyword}||'%'
+					</when>
+					<when test="type == 'W'.toString()">
+						writer like '%'||#{keyword}||'%'
+					</when>
+				</choose>
+			</trim>
+		</foreach>
+	</trim> 
+</sql>
+
 <!-- p294, p297 	3/20 -->
 <!-- 페이징 처리 -->
 <select id="getListWithPaging" resultType="org.fintech.domain.BoardVO">
@@ -74,18 +100,29 @@
 				select 	/*+INDEX_DESC(tbl_board pk_board) */
 						rownum rn, bno, title, content, writer, regdate, updatedate
 				from	tbl_board
-				where	rownum <= #{pageNum} * #{amount}
-			)
-	where	rn > (#{pageNum} -1) * #{amount}
-	
+				where	
+]]>		
+
+<!-- p339 	3/22 
+sql문 소환 -->
+<include refid="criteria"></include>
+
+<![CDATA[	
+	rownum <= #{pageNum} * #{amount}				
+	)
+where	rn > (#{pageNum} -1) * #{amount}	
 ]]>
-</select>
+</select> 
 
 <!-- p323  	3/21 -->
 <!-- 전체 행 수 구하기 -->
 <select id="getTotalCount" resultType="int">
-	select count(*) from tbl_board where bno > 0
+	select 	count(*) 
+	from 	tbl_board 
+	where	<include refid="criteria"></include>
+ 			bno > 0
 </select>
+
 
 
 </mapper>  

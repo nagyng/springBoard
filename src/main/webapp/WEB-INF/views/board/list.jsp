@@ -68,6 +68,33 @@
                                 </c:forEach>
                             </table><!-- table 태그의 끝 -->
                             
+                            <!-- p343 	3/22 -->
+                            <!-- 게시물 검색 조건 & 검색 문자열 추가 시작 -->
+                            <form id="searchForm" action="/board/list" method="get">
+                            	<select name="type">
+                            		<option value="" <c:out 	value="${pageMaker.cri.type == null ? 'selected' : '' }"/>>
+                            			 -- </option>
+                            		<option value="T" <c:out 	value="${pageMaker.cri.type eq 'T' ? 'selected' : '' }"/>>
+                            			 제목 </option>
+                            		<option value="C" <c:out 	value="${pageMaker.cri.type eq 'C' ? 'selected' : '' }"/>>
+                            			 내용 </option>
+                            		<option value="W" <c:out 	value="${pageMaker.cri.type eq 'W' ? 'selected' : '' }"/>>
+                            			 작성자 </option>
+                            		<option value="TC" <c:out 	value="${pageMaker.cri.type eq 'TC' ? 'selected' : '' }"/>>
+                            			 제목 or 내용 </option>
+                            		<option value="TW" <c:out 	value="${pageMaker.cri.type eq 'TW' ? 'selected' : '' }"/>>
+                            			 제목 or 작성자 </option>
+                            		<option value="TWC" <c:out 	value="${pageMaker.cri.type eq 'TWC' ? 'selected' : '' }"/>>
+                            			 제목 or 내용 or 작성자 </option>
+                            	</select>
+                            	<!-- 검색 문자열을 입력 -->
+                            	<input type="text" name="keyword" 	value='<c:out value="${pageMaker.cri.keyword}"/>' />
+                            	<input type="hidden" name="pageNum" value='<c:out value="${pageMaker.cri.pageNum}"/>' /> 
+                            	<input type="hidden" name="amount" 	value='<c:out value="${pageMaker.cri.amount}"/>' />
+                            	<button class="btn btn-default">검색</button>
+                            </form> 
+                            <!-- 게시물 검색 조건 & 검색 문자열 추가 종료 -->
+                            
                             <!-- p308  	3/20 -->
                             <!-- 화면 하단에 페이징 처리 시작 -->
                             <!-- pull-right : 화면 오른쪽에 표시 처리 -->
@@ -94,6 +121,10 @@
                             <form action="/board/list" method="get" id="actionForm">
                             	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
                             	<input type="hidden" name="amount" value="${pageMaker.cri.amount }">  
+                            	<!-- p343 	3/22 
+                            		검색조건,검색문자열을 hidden선언 -->
+                            	<input type="hidden" name="type" value="${pageMaker.cri.type }">
+                            	<input type="hidden" name="keyword" value="${pageMaker.cri.keyword }">  
                             </form>
                             
                              
@@ -202,6 +233,32 @@ $(document).ready(function() {
 		actionForm.append("<input type='hidden' name='bno' value='"+ $(this).attr("href") + "'>");
 		actionForm.attr("action","/board/get");
 		actionForm.submit();
+	});
+	
+	//p342 	3/22 
+	//검색 버튼의 이벤트 처리
+	//조회 버튼의 모든 정보를 변수에 대입 
+	var searchForm = $("#searchForm");
+	
+	$("#searchForm button").on("click", function(e){
+		
+		if(!searchForm.find("option:selected").val()){
+			alert("검색종류를 선택하세요.");
+			return false;
+		}
+
+		if(!searchForm.find("input[name='keyword']").val()){
+			alert("키워드를 입력하세요.");
+			return false;
+		}
+		
+		//검색 후에 1페이지로 이동
+		searchForm.find("input[name='pageNum']").val("1");
+		e.preventDefault();
+		
+		//검색에서 입력받은 데이터를 서버로 전송
+		searchForm.submit();
+		
 	});
 	
 });

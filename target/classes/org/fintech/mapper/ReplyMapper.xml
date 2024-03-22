@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.fintech.mapper.ReplyMapper">
+
+<!-- p382 	3/22 -->
+<insert id="insert">
+	insert 
+	into 	tbl_reply (rno, bno, reply, replyer, replyDate)
+	values 	(seq_reply.nextval, #{bno}, #{reply}, #{replyer}, sysdate)
+</insert>
+
+<!-- p384 	3/22 -->
+<select id="read" resultType="org.fintech.domain.ReplyVO">
+	select 	* 
+	from 	tbl_reply 
+	where 	rno = #{rno}
+</select>
+
+<!-- p386 	3/22 -->
+<delete id="delete">
+	delete 
+	from 	tbl_reply 
+	where 	rno = #{rno}
+</delete>
+
+<!-- p386  	3/22 -->
+<update id="update">
+	update 	tbl_reply 
+	set 	reply = #{reply}, 
+			updatedate = sysdate 
+	where 	rno = #{rno}
+</update>
+
+
+
+
+</mapper>

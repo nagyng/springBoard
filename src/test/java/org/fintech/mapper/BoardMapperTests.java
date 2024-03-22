@@ -103,7 +103,7 @@ public class BoardMapperTests {
 	
 	//p297  	3/20
 	//페이징 처리 - 수정 
-	@Test
+	@Ignore
 	public void testPaging2() {
 		 
 		Criteria cri = new Criteria();
@@ -114,6 +114,20 @@ public class BoardMapperTests {
 		List<BoardVO> list = mapper.getListWithPaging(cri);
 		 
 		list.forEach(board -> log.info(board.getBno())); 
+	}
+	
+	//p336  	3/22 
+	//검색 및 페이징 처리
+	@Test
+	public void testSearch() {
+		
+		Criteria cri = new Criteria();
+		cri.setKeyword("엔딩");		//검색할 내용
+		cri.setType("TC");			//제목+내용
+		
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		
+		list.forEach(board -> log.info(board));
 	}
 	
 	

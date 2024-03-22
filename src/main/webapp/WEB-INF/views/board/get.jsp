@@ -55,9 +55,14 @@
 					<!-- p264 	3/20 -->
 					<form id="operForm" action="/board/modify" method="get">
 						<input type="hidden" id="bno" name="bno" 		 value='<c:out value="${board.bno }"/>'>
-					<!-- p317 	3/21 (페이지번호와 한페이지당 게시물수 추가 --> 
+						<!-- p317 	3/21 
+							페이지번호와 한페이지당 게시물수 추가 --> 
 						<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${cri.pageNum }"/>'>
 						<input type="hidden" id="amount" name="amount"	 value='<c:out value="${cri.amount }"/>'>
+						<!-- p345 	3/22 
+							조회 페이지에서 검색 처리 (검색조건, 문자열) -->
+						<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>
+						<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
 					</form>
 			</div>
 			<!-- end panel-body -->
@@ -87,8 +92,7 @@ $(document).ready(function(){
 	});
 	
 	//목록 버튼을 클릭한 경우 처리
-	$("button[data-oper='list']").on("click", function(e){
-		
+	$("button[data-oper='list']").on("click", function(e){ 
 		operForm.find("#bno").remove();
 		operForm.attr("action","/board/list")
 		operForm.submit();
