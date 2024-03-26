@@ -1,7 +1,9 @@
 package org.fintech.mapper;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
+import org.fintech.domain.Criteria;
 import org.fintech.domain.ReplyVO;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -68,7 +70,7 @@ public class ReplyMapperTests {
 	}
 	
 	//p387  	3/22
-	@Test
+	@Ignore
 	public void testUpdate() {
 		
 		Long targetRno = 10L;
@@ -81,6 +83,36 @@ public class ReplyMapperTests {
 		
 		log.info("업데이트 COUNT: " + count);
 	}
+	
+	//p388  	3/25
+	//댓글 페이징 처리
+	@Ignore
+	public void testList() {
+		
+		Criteria cri = new Criteria();
+		
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
+		
+		replies.forEach(reply -> log.info(reply));
+	}
+	
+	//p431  	3/26
+	//댓글 페이징 처리 테스트 
+	@Ignore
+	public void testList2() {
+		//댓글 목록 1페이지 10개를 보여준다. 
+		Criteria cri = new Criteria(1, 10);
+		//특정 게시물 번호에 대한 댓글 목록을 가져온다.
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, 379L);
+		
+		replies.forEach(reply -> log.info(reply));
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 }

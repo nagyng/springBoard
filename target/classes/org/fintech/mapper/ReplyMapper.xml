@@ -33,6 +33,35 @@
 	where 	rno = #{rno}
 </update>
 
+<!-- p388 	3/25 -->
+<!-- p432 	3/26 
+	 (수정) 댓글 페이징 처리 -->
+<select id="getListWithPaging" resultType = "org.fintech.domain.ReplyVO">
+
+<![CDATA[
+select rno, bno, reply, replyer, replydate, updatedate
+from 
+	(
+	select 	/*+INDEX(tbl_reply idx_reply) */
+			rownum rn, rno, bno, reply, replyer, replyDate, updatedate
+	from 	tbl_reply
+	where 	bno = #{bno}
+	and		rno > 0
+	and		rownum <= #{cri.pageNum} * #{cri.amount}
+	) 
+where	rn > (#{cri.pageNum} -1) * #{cri.amount}
+]]> 
+	
+</select>
+
+<!-- p433 	3/26 
+	 댓글 건수 처리 -->
+<select id="getCountByBno" resultType="int"> 
+select 	count(rno) 
+from 	tbl_reply 
+where 	bno = #{bno} 
+</select>
+
 
 
 

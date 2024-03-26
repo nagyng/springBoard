@@ -1,5 +1,9 @@
 package org.fintech.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.fintech.domain.Criteria;
 import org.fintech.domain.ReplyVO;
 
 public interface ReplyMapper {
@@ -15,6 +19,15 @@ public interface ReplyMapper {
 	
 	//p386 	3/22 
 	public int update(ReplyVO reply);	//댓글 수정
+	
+	//p388 	3/25
+	public List<ReplyVO> getListWithPaging(
+			@Param("cri") Criteria cri,
+			@Param("bno") Long bno
+			);
+	
+	//p432 	3/26 
+	public int getCountByBno(Long bno);		//댓글 건수 파악
 	
 	
 }
